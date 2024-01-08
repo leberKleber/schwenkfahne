@@ -1,0 +1,83 @@
+<html lang="de">
+<head>
+    <script
+            src="https://code.jquery.com/jquery-3.7.1.slim.min.js"
+            integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8="
+            crossorigin="anonymous"></script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.0/dist/svg.min.js"></script>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+</head>
+<body>
+<form>
+    <div style="display: block">
+        <label>
+            Farbe Rahmen 1:
+            <input type="color" value="#4EDA2C" id="color_border_1" onchange="buildDaShit()">
+        </label>
+        <label>
+            Farbe Rahmen 2:
+            <input type="color" value="#D0FF14" id="color_border_2" onchange="buildDaShit()">
+        </label>
+        <label>
+            Farbe Hintergrund:
+            <input type="color" value="#FFFFFF" id="color_bg" onchange="buildDaShit()">
+        </label>
+        <label>
+            Breite beide Rahmen zusammen (in %):
+            <input type="number" value="10" id="width" onchange="buildDaShit()">
+        </label>
+    </div>
+    <div style="display: block">
+        <label>
+            RAW daten. Wichtig zum nachstellen:
+            <input type="text" readonly id="raw">
+        </label>
+    </div>
+</form>
+
+<hr>
+<!--svg width="800" height="800">
+    <g transform="translate(400,0) rotate(45)">
+        <rect height="500" width="500" style="fill:red"></rect>
+        <rect id="svg_line_1" x="50" y="50" height="400" width="400" style="fill:blue"></rect>
+        <rect x="100" y="100" height="300" width="300" style="fill:white"></rect>
+    </g>
+</svg-->
+<script>
+    let mySVG = SVG().addTo('body')
+
+    function buildDaShit() {
+        const fixedWith = 500
+        const colorBorder1 = document.getElementById("color_border_1").value
+        const colorBorder2 = document.getElementById("color_border_2").value
+        const colorBg = document.getElementById("color_bg").value
+        const width = document.getElementById("width").value
+
+        const widthPerBorder = (fixedWith / 100 * width) / 4
+
+        var draw = mySVG.size('100%', '100%')
+        var group = draw.group()
+        group.rotate(45)
+        group.translate(400, 0)
+
+        group.rect(fixedWith, fixedWith).fill(colorBorder1)
+        group.rect(fixedWith - (widthPerBorder * 2), fixedWith - (widthPerBorder * 2))
+            .move(widthPerBorder, widthPerBorder)
+            .fill(colorBorder2)
+
+        group.rect(fixedWith - (widthPerBorder * 4), fixedWith - (widthPerBorder * 4))
+            .move(widthPerBorder * 2, widthPerBorder * 2)
+            .fill(colorBg)
+
+        group.image('wappen.png').size(fixedWith - (widthPerBorder * 4), fixedWith - (widthPerBorder * 4))
+            .move(widthPerBorder * 2, widthPerBorder * 2)
+
+        document.getElementById("raw").value = colorBorder1+";"+colorBorder2+";"+colorBg+";"+width
+    }
+
+    buildDaShit()
+</script>
+</body>
+</html>
